@@ -1,6 +1,7 @@
 package org.sid.web;
 
 
+import org.sid.dao.VoyageurRepository;
 import org.sid.entities.AppUser;
 import org.sid.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 public class AccountRestController {
 	@Autowired
 	private AccountService accountService;
-	
+	@Autowired
+    private VoyageurRepository voyageurRepository;
 	@PostMapping("/users")
 	public AppUser register(@RequestBody RegisterForm data) {
 		String username=data.getUsername();
@@ -39,7 +42,7 @@ public class AccountRestController {
 		appUser.setPassword(password);
 		 accountService.saveUser(appUser);
 		 accountService.addRoleToUse(username, "USER");
-		 
+		 voyageurRepository.save(new Voyageur(nom,prenom,datenaiss,lieunaiss,username,Integer.parseInt(tel),password));
 		 return appUser;
 		
 	}
